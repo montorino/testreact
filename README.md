@@ -1,13 +1,15 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+Используем Vite сборку из коробки по умолчанию для React.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Фронт запускается из корневой папки командой npm run dev.
 
-Используем Vite сборку из коробки по умолчанию для React
-Фронт запускается из корневой папки командой npm run dev
-Json-server запускается из корневой папки командой npm run server
+Json-server запускается из корневой папки командой npm run server.
+
 Для запуска фронта и json-server используем 2 разных пользовательский процесса powershell в терминале. 
+
+При добавлении информации о новом семинаре, информация добавляется в json файл, но для обновления или удаления добавленного семинара требуется перезапустить json-server вручную.
+
+Похоже на недочет json-server, как опивывается здесь: https://github.com/typicode/json-server/issues/519?ysclid=m6wg42p67q103096931 
+
+В общем, при добавлении нового семинара json-server не перезагружается автоматом.

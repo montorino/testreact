@@ -9,7 +9,8 @@ function App() {
 
   //Устанавливаем ссылку на API
 
-  const API_URL = 'http://localhost:3000/seminars'
+  const API_URL = 'http://localhost:3500/seminars'
+
 
   // Задаем начальное состояние
   const [seminars, setSeminars] = useState([])
@@ -23,6 +24,7 @@ function App() {
   const [seminarDate, setSeminarDate] = useState('')
   const [seminarTime, setSeminarTime] = useState('')
   const [seminarPhoto, setSeminarPhoto] = useState('')
+  const [actionDone, setActionDone] = useState(false)
 
 
   // Открываем окно "Добавить Семинар"
@@ -76,9 +78,10 @@ function App() {
 
   // Обновляем информацию о семинаре в файле seminars.json
   const updateSeminar = async (seminarData) => {
+
     formatDate(seminarData)
     const updateOptions = {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(seminarData),
     }
@@ -86,6 +89,9 @@ function App() {
     const updateURL = `${API_URL}/${seminarID}`
     const result = await apiRequest(updateURL, updateOptions, setFetchError)
     if (result) setFetchError(result)
+
+    setActionDone(true)
+
 
   }
 
@@ -98,6 +104,8 @@ function App() {
     const deleteURL = `${API_URL}/${id}`
     const result = await apiRequest(deleteURL, deleteOptions, setFetchError)
     if (result) setFetchError(result)
+
+    setActionDone(true)
   }
 
 
@@ -112,7 +120,8 @@ function App() {
         }
         const data = await response.json();
         setSeminars(data);
-        setFetchError(null);
+        // setFetchError(null);
+        setActionDone(false)
       } catch (err) {
         setFetchError(err.message);
       } finally {
@@ -120,12 +129,13 @@ function App() {
       }
     }
 
-    //Делаем задержу в 500мс, чтобы показать 'Loading...'
+    // Делаем задержу в 500мс, чтобы показать 'Loading...'
     setTimeout(() => {
       (async () => { await fetchSeminars() })()
     }, 500)
 
-  }, [seminars])
+
+  }, [actionDone])
 
   return (
     <>
@@ -150,14 +160,15 @@ function App() {
         setSeminarPhoto={setSeminarPhoto}
         updateSeminar={updateSeminar}
       />
-      
+
       {isLoading && <div>Loading seminars...</div>}
       {fetchError && <div>Error: {fetchError}</div>}
 
-      {/* Таблица семинаров */}
-      <div className="scrollableTable">
+
+      {/* Таблица семинаров  */}
+      {!fetchError && !isLoading && <div className="scrollableTable">
         <table>
-          {!fetchError && !isLoading && <thead>
+          <thead>
             <tr>
               <th>id</th>
               <th>title</th>
@@ -168,9 +179,9 @@ function App() {
               <th>actions</th>
             </tr>
           </thead>
-          }
+
           <tbody>
-            {!fetchError && !isLoading && seminars.map(seminar => (
+            {seminars.map(seminar => (
               // Строка таблицы семинаров
               <LineItem key={seminar.id} item={seminar} handleUpdate={handleUpdate} handleDelete={deleteSeminar} />
             ))
@@ -178,6 +189,8 @@ function App() {
           </tbody>
         </table>
       </div>
+      }
+
     </>
   )
 }

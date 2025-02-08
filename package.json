@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server -w src/server/seminars.json"
+    "server": "json-server ./src/server/seminars.json -p 3500"
   },
   "dependencies": {
     "react": "^18.3.1",
